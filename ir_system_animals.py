@@ -58,7 +58,17 @@ def boolean_not(term, inverted_index, all_doc_ids):
     return all_doc_ids - get_postings(term, inverted_index)
 
 # ---------------------------------------------------
-# Step 5: Run the System
+# Step 5: Print Query Results
+# ---------------------------------------------------
+def print_result(query_label, doc_ids):
+    print("QUERY:", query_label)
+    print("Result:")
+    for doc_id in sorted(doc_ids):
+        print(f"doc{doc_id}: {documents[doc_id]}")
+    print()
+
+# ---------------------------------------------------
+# Step 6: Run the System
 # ---------------------------------------------------
 if __name__ == "__main__":
     dictionary, inverted_index = build_index(documents)
@@ -81,3 +91,10 @@ if __name__ == "__main__":
     print("bird OR reptile ->", boolean_or("bird", "reptile", inverted_index))
     print("mammal AND NOT africa ->", get_postings("mammal", inverted_index) & boolean_not("africa", inverted_index, all_doc_ids))
     print("NOT carnivorous ->", boolean_not("carnivorous", inverted_index, all_doc_ids))
+
+    print("\nFormatted Query Results:")
+    print_result("mammal", get_postings("mammal", inverted_index))
+    print_result("africa AND mammal", boolean_and("africa", "mammal", inverted_index))
+    print_result("bird OR reptile", boolean_or("bird", "reptile", inverted_index))
+    print_result("mammal AND NOT africa", get_postings("mammal", inverted_index) & boolean_not("africa", inverted_index, all_doc_ids))
+    print_result("NOT carnivorous", boolean_not("carnivorous", inverted_index, all_doc_ids))
